@@ -1,5 +1,5 @@
 # Base image
-FROM node:18
+FROM node:22
 
 # Set the working directory in the container
 WORKDIR /app
@@ -13,7 +13,8 @@ RUN npm install -g pnpm
 # install all dependencies (including devDependencies for build)
 RUN pnpm install
 
-# build
+# build - use NODE_OPTIONS to support ESM-only Vite 7
+ENV NODE_OPTIONS="--experimental-require-module"
 RUN node build
 
 
