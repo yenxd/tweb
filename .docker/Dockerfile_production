@@ -25,5 +25,5 @@ FROM nginx:stable-alpine3.20-slim
 
 RUN apk update && apk upgrade --no-cache
 
-# copy the build files to nginx entry point
-COPY ./public /usr/share/nginx/html
+# copy the build files from the builder stage to nginx entry point
+COPY --from=0 /app/public /usr/share/nginx/html
