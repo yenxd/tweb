@@ -1,0 +1,30 @@
+services:
+  tweb:
+    image: ghcr.io/yenxd/tweb:latest
+    container_name: tweb
+    restart: unless-stopped
+    mem_limit: 64m
+    memswap_limit: 64m
+    cpus: 0.1
+    pids_limit: 50
+    networks:
+      - shared-net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: tweb-cloudflared
+    restart: unless-stopped
+    mem_limit: 32m
+    cpus: 0.1
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - /home/ubuntu/.cloudflared/tweb.yml:/etc/cloudflared/config.yml:ro
+      - /home/ubuntu/.cloudflared/0ff81b6a-7a3f-4ac7-90c6-a02335abf742.json:/etc/cloudflared/credentials.json:ro
+    environment:
+      - TUNNEL_CRED_FILE=/etc/cloudflared/credentials.json
+    networks:
+      - shared-net
+
+networks:
+  shared-net:
+    external: true
