@@ -581,8 +581,8 @@ export class ApiManager extends ApiManagerMethods {
   }
 
   public invokeApi<T extends keyof MethodDeclMap>(method: T, params: MethodDeclMap[T]['req'] = {}, options: InvokeApiOptions = {}): CancellablePromise<MethodDeclMap[T]['res']> {
-    if (method === 'messages.sendMessage' && params && typeof params === 'object') {
-      if ((params as any).message && typeof (params as any).message === 'string') {
+    if(method === 'messages.sendMessage' && params && typeof params === 'object') {
+      if((params as any).message && typeof (params as any).message === 'string') {
         (params as any).message = (params as any).message.replace(/\\$\rightarrow\\$/g, '→').replace(/\$\rightarrow\$/g, '→');
       }
     }
