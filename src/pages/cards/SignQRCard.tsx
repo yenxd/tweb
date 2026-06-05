@@ -29,6 +29,19 @@ type Spec = Extract<CardSpec, {name: 'signQR'}>;
 const FETCH_INTERVAL = 3;
 const QR_SIZE = 240;
 
+const LOGO_SVG = `<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 160 160" style="enable-background:new 0 0 160 160;" xml:space="preserve">
+<style type="text/css">
+  .st0{fill-rule:evenodd;clip-rule:evenodd;fill:#3390ec;}
+</style>
+<path class="st0" d="M80,13c37,0,67,30,67,67s-30,67-67,67s-67-30-67-67S43,13,80,13z M108.7,51.9h-0.1c-2.5,0-6.4,1.4-24.3,8.8
+  L81.2,62C74,65,61,70.6,42,78.9c-3.3,1.3-5,2.6-5.2,3.8c-0.3,2.3,2.9,3.1,7,4.4l1.2,0.4c3.5,1.1,7.8,2.3,10.1,2.3
+  c2.2,0,4.6-0.8,7.2-2.6l9.7-6.5c12.7-8.5,19.4-12.9,20-13.1l0.2-0.1c0.4-0.1,0.9-0.1,1.2,0.2c0.4,0.4,0.4,1,0.3,1.2
+  c-0.3,1.5-17.8,17.3-19.2,18.7L74.4,88c-3.8,3.9-7.9,6.3-1.5,10.7l1.5,1c4.8,3.2,8,5.5,12.9,8.7l1.3,0.9c3.9,2.6,7,5.6,11,5.2
+  c1.8-0.2,3.7-1.9,4.7-6.8l0.1-0.3c2.3-12.3,6.8-39.1,7.9-50.1c0.1-1,0-2.2-0.1-2.7l0-0.2c-0.1-0.5-0.3-1.2-0.9-1.6
+  C110.5,52.1,109.3,51.9,108.7,51.9z"/>
+</svg>`;
+
 /**
  * Card variant of `pageSignQR`. Polls `auth.exportLoginToken` in a loop, painting
  * the QR code into the `auth-image` slot. On `loginTokenSuccess` we go to IM; on
@@ -87,12 +100,8 @@ export default function SignQRCard(_props: {spec: Spec}) {
     const textColor = style.getPropertyValue('--primary-text-color').trim();
     const primaryColor = style.getPropertyValue('--primary-color').trim();
 
-    const logoUrl = await fetch('assets/img/logo_padded.svg')
-    .then((res) => res.text())
-    .then((text) => {
-      text = text.replace(/(fill:).+?(;)/, `$1${primaryColor}$2`);
-      return textToSvgURL(text);
-    });
+    const svgText = LOGO_SVG.replace(/(fill:).+?(;)/, `$1${primaryColor}$2`);
+    const logoUrl = textToSvgURL(svgText);
 
     const qrCode = new QRCodeStylingCtor({
       width: QR_SIZE * window.devicePixelRatio,
