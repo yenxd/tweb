@@ -25,3 +25,4 @@ RUN apk update && apk upgrade --no-cache
 
 # copy the build files from the builder stage to nginx entry point
 COPY --from=0 /app/public /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
